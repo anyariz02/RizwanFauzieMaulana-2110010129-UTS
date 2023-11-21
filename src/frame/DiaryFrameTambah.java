@@ -101,8 +101,8 @@ public class DiaryFrameTambah extends javax.swing.JFrame {
             }
         });
         addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseReleased(java.awt.event.MouseEvent evt) {
-                formMouseReleased(evt);
+            public void mousePressed(java.awt.event.MouseEvent evt) {
+                formMousePressed(evt);
             }
         });
         addWindowListener(new java.awt.event.WindowAdapter() {
@@ -275,13 +275,6 @@ public class DiaryFrameTambah extends javax.swing.JFrame {
        dispose();
     }//GEN-LAST:event_btnSimpanActionPerformed
 
-    private void formMouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_formMouseReleased
-        //set posisi kordinat x dan y menjadi 0
-       //merupakan bagian dari panel undecorated agar bisa di drag
-        positionX = evt.getX();
-        positionY = evt.getY();
-    }//GEN-LAST:event_formMouseReleased
-
     private void formMouseDragged(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_formMouseDragged
         //set posisi kordinat x dan y dari mouse yang digerakkan 
        //merupakan bagian dari panel undecorated agar bisa di drag
@@ -303,6 +296,13 @@ public class DiaryFrameTambah extends javax.swing.JFrame {
     private void formWindowActivated(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowActivated
        tfJudul.requestFocus();
     }//GEN-LAST:event_formWindowActivated
+
+    private void formMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_formMousePressed
+        //set posisi kordinat x dan y menjadi 0
+       //merupakan bagian dari panel undecorated agar bisa di drag
+        positionX = evt.getX();
+        positionY = evt.getY();
+    }//GEN-LAST:event_formMousePressed
 
     /**
      * @param args the command line arguments
