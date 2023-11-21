@@ -15,10 +15,13 @@ import model.Diary;
  */
 public class DiaryFrameTambah extends javax.swing.JFrame {
     
+    //format untuk save tanggal
     SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MMMM-yyyy");
     
     int positionX = 0;
     int positionY = 0;
+    
+    //deklarasi variabel untuk status edit dan tambah
     int status = 0;
     private final int tambah = 0;
     private final int update = 1;
@@ -29,7 +32,8 @@ public class DiaryFrameTambah extends javax.swing.JFrame {
         int id = lastDiary.getIdDiary()+1;
         return id;
     }
-
+    
+    //method untuk merubah format tanggal
     public Date getFormatDate(String tanggal){
         try{
             Date tanggalDiary = (Date) dateFormat.parse(tanggal);
@@ -39,7 +43,8 @@ public class DiaryFrameTambah extends javax.swing.JFrame {
             return new Date(System.currentTimeMillis());
         }
     }
-       
+    
+    //konstruktor utama yang merupakan frame tambah
     public DiaryFrameTambah() {
         initComponents();
         status = tambah;
@@ -47,14 +52,18 @@ public class DiaryFrameTambah extends javax.swing.JFrame {
         getContentPane().setBackground(new java.awt.Color(19, 19, 19));
     }
     
+    //konstruktor kedua yang merupakan frame edit
     public DiaryFrameTambah(Diary diary){
         initComponents();
         status = update;
+        
+        //menampilkan data baru yang sudah diambil sebelumnya pada design edit
         lbPanel.setText("Edit Catatan");
         tfId.setText(String.valueOf(diary.getIdDiary()));
         tfJudul.setText(diary.getJudul());
         dpTanggal.setDate(getFormatDate(diary.getTanggal()));
         taCatatan.setText(diary.getCatatan());
+        
         setLocationRelativeTo(this);
         getContentPane().setBackground(new java.awt.Color(19, 19, 19));
     }
@@ -235,12 +244,22 @@ public class DiaryFrameTambah extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnSimpanActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSimpanActionPerformed
+        //mengambil data pada design
         String judul = tfJudul.getText();
         String tanggal = dateFormat.format(dpTanggal.getDate());
         String catatan = taCatatan.getText();
         
+        //jika sedang status tambah dan data pada tabel kosong maka dituliskan 1
+        //dan jika data sudah ada, menjalakan method In increment
         if(status==tambah){
-             DiaryFrame.diarys.add(new Diary(IdIncrement(),tanggal,judul,catatan));
+            int id=1;
+            if(!DiaryFrame.diarys.isEmpty()){
+                id = IdIncrement();
+            }
+             DiaryFrame.diarys.add(new Diary(id,tanggal,judul,catatan));
+             
+        // sebaliknya jika status edit, lakukan perulangan pada arraylist diarys
+        // jika menemukan id yang sama, maka lakukan break
         }else{
             int index = 0;
             for(Diary d: DiaryFrame.diarys){
@@ -249,17 +268,23 @@ public class DiaryFrameTambah extends javax.swing.JFrame {
                     break;
                 }
             }
+            
+        // set data yang telat di edit
             DiaryFrame.diarys.set(index, new Diary(Integer.parseInt(tfId.getText()),tanggal,judul,catatan));
         }
        dispose();
     }//GEN-LAST:event_btnSimpanActionPerformed
 
     private void formMouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_formMouseReleased
+        //set posisi kordinat x dan y menjadi 0
+       //merupakan bagian dari panel undecorated agar bisa di drag
         positionX = evt.getX();
         positionY = evt.getY();
     }//GEN-LAST:event_formMouseReleased
 
     private void formMouseDragged(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_formMouseDragged
+        //set posisi kordinat x dan y dari mouse yang digerakkan 
+       //merupakan bagian dari panel undecorated agar bisa di drag
         setLocation(evt.getXOnScreen()-positionX, evt.getYOnScreen()-positionY);
     }//GEN-LAST:event_formMouseDragged
 
@@ -268,6 +293,8 @@ public class DiaryFrameTambah extends javax.swing.JFrame {
     }//GEN-LAST:event_jButton2ActionPerformed
 
     private void jCheckBox1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jCheckBox1ActionPerformed
+      //mengambil data tanggal pada hari ini dan set tanggal pada datePicker dengan
+      //data tanggal yg sudah diambil
       Date date = new Date();
       String dateNow = dateFormat.format(date);
       dpTanggal.setDate(getFormatDate(dateNow));

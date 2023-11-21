@@ -16,6 +16,8 @@ public class DiaryFrameDetail extends javax.swing.JFrame {
 
     int positionX = 0;
     int positionY = 0;
+    
+    //deklarasi variabel untuk untuk status lihat
     int status = 0;
     private final int lihat = 0;
     
@@ -23,13 +25,18 @@ public class DiaryFrameDetail extends javax.swing.JFrame {
         initComponents();
         status = 1;
     }
+    
+    //konstruktor utama yang digunakan untuk melihat detil data yang dipilih
      public DiaryFrameDetail(Diary diary) {
         initComponents();
+        
+        
         status = lihat;
         taCatatan.setLineWrap(true);
         setLocationRelativeTo(this);
         getContentPane().setBackground(new java.awt.Color(19, 19, 19));
-
+        
+        //menampilkan data baru yang sudah diambil sebelumnya pada design detil
         lbJudul.setText(diary.getJudul());
         lbTanggal.setText(diary.getTanggal());
         taCatatan.setText(diary.getCatatan());
@@ -194,10 +201,14 @@ public class DiaryFrameDetail extends javax.swing.JFrame {
     }//GEN-LAST:event_btnEksporActionPerformed
 
     private void formMouseDragged(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_formMouseDragged
+        //set posisi kordinat x dan y dari mouse yang digerakkan 
+       //merupakan bagian dari panel undecorated agar bisa di drag
         setLocation(evt.getXOnScreen()-positionX, evt.getYOnScreen()-positionY);
     }//GEN-LAST:event_formMouseDragged
 
     private void formMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_formMousePressed
+        //set posisi kordinat x dan y menjadi 0
+       //merupakan bagian dari panel undecorated agar bisa di drag
         positionX = evt.getX();
         positionY = evt.getY();
     }//GEN-LAST:event_formMousePressed

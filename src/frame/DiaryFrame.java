@@ -25,21 +25,21 @@ public class DiaryFrame extends javax.swing.JFrame {
     int positionX = 0;
     int positionY = 0;
 
+    //inisialisasi variabel yang merupakan class diary
     Diary diary;
+    
+    //membuat objek baru arraylist dari class diary
     public static ArrayList<Diary> diarys = new ArrayList<Diary>();
     
-    //menambahkan isi tabel jika pertama kali dirun
-    public final void mainDiary(){
-        diarys.add(new Diary(1,"12-November-2023","Pertama","Isinya"));
-        diarys.add(new Diary(2,"10-Oktober-2023","Kedua","Isinya"));
-    }
-    
-    //method 
+    //method query 
     public void selectDiary(String keyword){
         ArrayList<Diary> data = new ArrayList<Diary>();
+        
+    //untuk mencari data (pencarian)
         if(!keyword.equals("")){
             for(Diary d : diarys){
-                if(d.getJudul().toLowerCase().contains(keyword.toLowerCase())){
+                if(d.getTanggal().toLowerCase().contains(keyword) || 
+                        d.getJudul().toLowerCase().contains(keyword.toLowerCase())){
                     data.add(d);
                 }
             }
@@ -47,9 +47,11 @@ public class DiaryFrame extends javax.swing.JFrame {
                  data = diarys;
         }
         
+        //inisialisasi tabel model
         DefaultTableModel model = (DefaultTableModel)tDiary.getModel();
         Object[] row =  new Object[4];
         
+        //perulangan untuk mendapatkan data
         for (int i=0; i<data.size(); i++){
             row[0] = data.get(i).getIdDiary();
             row[1] = data.get(i).getTanggal();
@@ -60,17 +62,21 @@ public class DiaryFrame extends javax.swing.JFrame {
         
     }
     
+    //method untuk menampikan data yang sudah di seet pada selectDiary sebelumnya
     public final void showDiary(String keyword){
+        //untuk mereset tabel
         DefaultTableModel model = (DefaultTableModel)tDiary.getModel();
         model.setRowCount(0);
+        
         selectDiary(keyword);
         setLocationRelativeTo(this);
+        
+        //merubah background frame jadi gelap
         getContentPane().setBackground(new java.awt.Color(19, 19, 19));
     }
     
     public DiaryFrame() {
         initComponents();
-        mainDiary();
         showDiary("");
     }
 
@@ -304,11 +310,13 @@ public class DiaryFrame extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnTambahActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnTambahActionPerformed
+        //menampilkan frame tambah
         DiaryFrameTambah diaryFrameTambah = new DiaryFrameTambah();
         diaryFrameTambah.setVisible(true);
     }//GEN-LAST:event_btnTambahActionPerformed
 
     private void formWindowActivated(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowActivated
+        //agar setiap window aktif dia melakukan reset tabel/refresh tabel
         showDiary("");
     }//GEN-LAST:event_formWindowActivated
 
@@ -322,6 +330,8 @@ public class DiaryFrame extends javax.swing.JFrame {
     }//GEN-LAST:event_tDiaryMouseReleased
 
     private void pmEditActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_pmEditActionPerformed
+            //setelah baris tabel di klik, kemudian mengambil data dari tabel
+            // dan membuat data diary baru
             int i  = tDiary.getSelectedRow();
             TableModel model  = tDiary.getModel();
             diary = new Diary();
@@ -330,12 +340,14 @@ public class DiaryFrame extends javax.swing.JFrame {
             diary.setJudul(model.getValueAt(i, 2).toString());
             diary.setCatatan(model.getValueAt(i, 3).toString());
             
+            //menampilkan frame edit dengan membawa data baru yg sudah diambil
             DiaryFrameTambah diaryFrameTambah = new DiaryFrameTambah(diary);
             diaryFrameTambah.setVisible(true);
         
     }//GEN-LAST:event_pmEditActionPerformed
 
     private void pmHapusActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_pmHapusActionPerformed
+            //pada baris yang diklik menghapus pada tabel dan arraylist
             int i  = tDiary.getSelectedRow();
             DefaultTableModel model  = (DefaultTableModel) tDiary.getModel();
             model.removeRow(i);
@@ -347,11 +359,15 @@ public class DiaryFrame extends javax.swing.JFrame {
     }//GEN-LAST:event_btnKeluarActionPerformed
 
     private void formMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_formMousePressed
+       //set posisi kordinat x dan y menjadi 0
+       //merupakan bagian dari panel undecorated agar bisa di drag
         positionX = evt.getX();
         positionY = evt.getY();
     }//GEN-LAST:event_formMousePressed
 
     private void formMouseDragged(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_formMouseDragged
+        //set posisi kordinat x dan y dari mouse yang digerakkan 
+       //merupakan bagian dari panel undecorated agar bisa di drag
         setLocation(evt.getXOnScreen()-positionX, evt.getYOnScreen()-positionY);
     }//GEN-LAST:event_formMouseDragged
 
@@ -359,6 +375,7 @@ public class DiaryFrame extends javax.swing.JFrame {
         try{
             //buat file baru
             BufferedWriter out = new BufferedWriter(new FileWriter("./exportfile/mydiary.txt"));
+            
             //mengambil data pada tabel dengan perulangan pada row dan kolom lalau disimpan ke file
             for(int i = 0; i < tDiary.getRowCount(); i++){
                 for(int j = 0; j < tDiary.getColumnCount(); j++){
@@ -379,6 +396,8 @@ public class DiaryFrame extends javax.swing.JFrame {
     }//GEN-LAST:event_btnEksporActionPerformed
 
     private void tfPencarianKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_tfPencarianKeyTyped
+        //memanggil method agar bisa melakukan pencarian
+        //script pencarian nya ada pada dalam method selectDiary
         showDiary(tfPencarian.getText());
     }//GEN-LAST:event_tfPencarianKeyTyped
 
@@ -388,17 +407,20 @@ public class DiaryFrame extends javax.swing.JFrame {
             diarys.clear();
             //mencari file yang telah disimpan
             BufferedReader in = new BufferedReader(new FileReader("./exportfile/mydiary.txt"));   
-            Scanner dataBaru = new Scanner(in);
             
-            //mengambil data pada file yang disimpan di file
-            while(dataBaru.hasNextLine()){
-                String baris = dataBaru.nextLine();
+            
+            //mengambil data pada file yang disimpan di file dan merubah nya ke string array
+            Scanner newData = new Scanner(in);
+            while(newData.hasNextLine()){
+                String baris = newData.nextLine();
+                String[] newData2 = baris.split(" ");
                 
-                String[] data = baris.split(" ");
-                String judul = data[1];
-                String tanggal = data[2];
-                String catatan = data[3];
-                Diary impor = new Diary(Integer.parseInt(data[0]),judul,tanggal,catatan);
+                String judul = newData2[1];
+                String tanggal = newData2[2];
+                String catatan = newData2[3];
+                
+                //menambahkan array yang sudah di set ke arraylist diary
+                Diary impor = new Diary(Integer.parseInt(newData2[0]),judul,tanggal,catatan);
                 diarys.add(impor);
             }
              // tampilkan dialog bisa berhasil
@@ -410,6 +432,8 @@ public class DiaryFrame extends javax.swing.JFrame {
     }//GEN-LAST:event_btnImporActionPerformed
 
     private void pmLihatActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_pmLihatActionPerformed
+             //setelah baris tabel di klik, kemudian mengambil data dari tabel
+            // dan membuat data diary baru
             int i  = tDiary.getSelectedRow();
             TableModel model  = tDiary.getModel();
             
@@ -417,7 +441,8 @@ public class DiaryFrame extends javax.swing.JFrame {
             diary.setTanggal(model.getValueAt(i, 1).toString());
             diary.setJudul(model.getValueAt(i, 2).toString());
             diary.setCatatan(model.getValueAt(i, 3).toString());
-        
+            
+            //menampilkan frame detil dengan data baru sudah diambil
             DiaryFrameDetail diaryFrameDetail = new DiaryFrameDetail(diary);
             diaryFrameDetail.setVisible(true);
     }//GEN-LAST:event_pmLihatActionPerformed
