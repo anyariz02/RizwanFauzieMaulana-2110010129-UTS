@@ -7,6 +7,7 @@ package frame;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import javax.swing.JOptionPane;
 import model.Diary;
 
 /**
@@ -16,7 +17,7 @@ import model.Diary;
 public class DiaryFrameTambah extends javax.swing.JFrame {
     
     //format untuk save tanggal
-    SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MMMM-yyyy");
+    SimpleDateFormat dateFormat = new SimpleDateFormat("dd MMMM yyyy");
     
     int positionX = 0;
     int positionY = 0;
@@ -42,6 +43,10 @@ public class DiaryFrameTambah extends javax.swing.JFrame {
             System.err.println("Error Tanggal : "+ex);
             return new Date(System.currentTimeMillis());
         }
+    }
+    
+    public void reset(){
+        
     }
     
     //konstruktor utama yang merupakan frame tambah
@@ -92,6 +97,7 @@ public class DiaryFrameTambah extends javax.swing.JFrame {
         lbPanel = new javax.swing.JLabel();
         jCheckBox1 = new javax.swing.JCheckBox();
         dpTanggal = new org.jdesktop.swingx.JXDatePicker();
+        btnReset = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setUndecorated(true);
@@ -186,6 +192,16 @@ public class DiaryFrameTambah extends javax.swing.JFrame {
             }
         });
 
+        btnReset.setBackground(new java.awt.Color(27, 188, 155));
+        btnReset.setFont(new java.awt.Font("Cooper Black", 0, 12)); // NOI18N
+        btnReset.setForeground(new java.awt.Color(51, 51, 51));
+        btnReset.setText("Reset");
+        btnReset.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnResetActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -195,6 +211,8 @@ public class DiaryFrameTambah extends javax.swing.JFrame {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                         .addGroup(layout.createSequentialGroup()
+                            .addComponent(btnReset, javax.swing.GroupLayout.PREFERRED_SIZE, 78, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                             .addComponent(btnSimpan)
                             .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                             .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 68, javax.swing.GroupLayout.PREFERRED_SIZE))
@@ -236,7 +254,8 @@ public class DiaryFrameTambah extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btnSimpan)
-                    .addComponent(jButton2))
+                    .addComponent(jButton2)
+                    .addComponent(btnReset))
                 .addContainerGap(12, Short.MAX_VALUE))
         );
 
@@ -256,7 +275,15 @@ public class DiaryFrameTambah extends javax.swing.JFrame {
             if(!DiaryFrame.diarys.isEmpty()){
                 id = IdIncrement();
             }
+            
+            if(tfJudul.getText().isEmpty() ||
+                taCatatan.getText().isEmpty()){
+                JOptionPane.showMessageDialog(null, "Masukkan data catatan terlebih dulu");
+            }else{
+                JOptionPane.showMessageDialog(null, "Catatan berhasil ditambah");
              DiaryFrame.diarys.add(new Diary(id,tanggal,judul,catatan));
+            }
+            
              
         // sebaliknya jika status edit, lakukan perulangan pada arraylist diarys
         // jika menemukan id yang sama, maka lakukan break
@@ -270,6 +297,8 @@ public class DiaryFrameTambah extends javax.swing.JFrame {
             }
             
         // set data yang telat di edit
+        
+         JOptionPane.showMessageDialog(null, "Catatan berhasi diedit");
             DiaryFrame.diarys.set(index, new Diary(Integer.parseInt(tfId.getText()),tanggal,judul,catatan));
         }
        dispose();
@@ -303,6 +332,12 @@ public class DiaryFrameTambah extends javax.swing.JFrame {
         positionX = evt.getX();
         positionY = evt.getY();
     }//GEN-LAST:event_formMousePressed
+
+    private void btnResetActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnResetActionPerformed
+       tfJudul.setText("");
+       dpTanggal.setDate(null);
+       taCatatan.setText("");
+    }//GEN-LAST:event_btnResetActionPerformed
 
     /**
      * @param args the command line arguments
@@ -340,6 +375,7 @@ public class DiaryFrameTambah extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btnReset;
     private javax.swing.JButton btnSimpan;
     private org.jdesktop.swingx.JXDatePicker dpTanggal;
     private javax.swing.JButton jButton2;

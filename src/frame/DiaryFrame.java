@@ -355,7 +355,13 @@ public class DiaryFrame extends javax.swing.JFrame {
     }//GEN-LAST:event_pmHapusActionPerformed
 
     private void btnKeluarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnKeluarActionPerformed
-        System.exit(0);
+        
+        if(JOptionPane.showConfirmDialog(this, 
+                "Yakin Ingin Keluar","Exit",JOptionPane.YES_NO_OPTION) 
+                == JOptionPane.YES_NO_OPTION)
+        {
+               System.exit(0);
+        }
     }//GEN-LAST:event_btnKeluarActionPerformed
 
     private void formMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_formMousePressed
@@ -379,7 +385,7 @@ public class DiaryFrame extends javax.swing.JFrame {
             //mengambil data pada tabel dengan perulangan pada row dan kolom lalau disimpan ke file
             for(int i = 0; i < tDiary.getRowCount(); i++){
                 for(int j = 0; j < tDiary.getColumnCount(); j++){
-                    out.write(tDiary.getValueAt(i, j).toString()+" ");
+                    out.write(tDiary.getValueAt(i, j).toString()+"/");
                 }
                 //menambahkan spasi
                 out.newLine();
@@ -413,7 +419,7 @@ public class DiaryFrame extends javax.swing.JFrame {
             Scanner newData = new Scanner(in);
             while(newData.hasNextLine()){
                 String baris = newData.nextLine();
-                String[] newData2 = baris.split(" ");
+                String[] newData2 = baris.split("/");
                 
                 String judul = newData2[1];
                 String tanggal = newData2[2];
